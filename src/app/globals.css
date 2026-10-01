@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/* ── Design tokens ───────────────────────────────────────────────────────────
+   Dark-first: convention halls are dim, and OLED black saves battery on a
+   long show day. High contrast numbers, 44pt+ tap targets.                  */
+@theme {
+  --color-ink: #0a0c10;
+  --color-panel: #12161d;
+  --color-raised: #1a1f29;
+  --color-line: #262d3a;
+  --color-mute: #8b95a7;
+  --color-soft: #c3cad6;
+
+  --color-give: #8b7cff; /* left column — what I'm offering */
+  --color-get: #2ed3b7; /* right column — what I'm receiving */
+  --color-gold: #ffcb2e; /* brand + wishlist */
+
+  --color-good: #34d399;
+  --color-fair: #fbbf24;
+  --color-bad: #f87171;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "PingFang SC", "PingFang TC",
+    "Apple SD Gothic Neo", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, monospace;
+}
+
+/* ── iOS safe areas (notch / Dynamic Island / home indicator) ────────────── */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@utility pl-safe {
+  padding-left: env(safe-area-inset-left);
+}
+@utility pr-safe {
+  padding-right: env(safe-area-inset-right);
+}
+@utility mb-safe {
+  margin-bottom: env(safe-area-inset-bottom);
+}
+@utility top-safe {
+  top: env(safe-area-inset-top);
+}
+@utility bottom-nav-offset {
+  /* height of BottomNav (64px) + home indicator */
+  bottom: calc(64px + env(safe-area-inset-bottom));
+}
+@utility pb-nav {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+html {
+  background: var(--color-ink);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-ink);
+  color: #fff;
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  overscroll-behavior-y: none; /* no rubber-band reveal of white behind the app */
+  touch-action: manipulation; /* kills the 300ms double-tap delay */
+  -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea,
+select {
+  /* 16px+ prevents iOS Safari from zooming on focus */
+  font-size: 16px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Pressed feedback for touch */
+.press {
+  transition: transform 80ms ease, opacity 80ms ease;
+}
+.press:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-sheet {
+  animation: sheet-up 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(var(--scan-h, 300px));
+    opacity: 0;
+  }
+}
+.animate-scanline {
+  animation: scan-line 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-sheet,
+  .animate-scanline {
+    animation: none;
+  }
+}
